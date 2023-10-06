@@ -1,0 +1,47 @@
+#include <iostream>
+#include <vector>
+#include <algorithm>
+
+using namespace std;
+
+int countOnes(int num) {
+    int count = 0;
+    while (num > 0) {
+        count += (num & 1);
+        num >>= 1;
+    }
+    return count;
+}
+
+bool compare(int a, int b) {
+    int onesA = countOnes(a);
+    int onesB = countOnes(b);
+    
+    if (onesA == onesB) {
+        return a < b;
+    }
+    
+    return onesA < onesB;
+}
+
+int main() {
+    int n;
+    cin >> n;
+
+    vector<int> arr(n);
+
+    for (int i = 0; i < n; i++) {
+        cin >> arr[i];
+    }
+
+    // Sorting integers based on the number of 1s in their binary representation
+    sort(arr.begin(), arr.end(), compare);
+
+    // Printing the sorted integers
+    for (int i = 0; i < n; i++) {
+        cout << arr[i] << " ";
+    }
+    cout << endl;
+
+    return 0;
+}
