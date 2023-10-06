@@ -1,0 +1,50 @@
+#include <iostream>
+#include <vector>
+
+using namespace std;
+
+void quick_sort_chars(vector<char>& arr, int left, int right) {
+    if (left < right) {
+        int i = left, j = right;
+        char pivot = arr[(left + right) / 2];
+
+        while (i <= j) {
+            while (arr[i] > pivot) {
+                i++;
+            }
+            while (arr[j] < pivot) {
+                j--;
+            }
+            if (i <= j) {
+                swap(arr[i], arr[j]);
+                i++;
+                j--;
+            }
+        }
+
+        quick_sort_chars(arr, left, j);
+        quick_sort_chars(arr, i, right);
+    }
+}
+
+int main() {
+    int n;
+    cin >> n;
+
+    vector<char> characters(n);
+
+    for (int i = 0; i < n; i++) {
+        cin >> characters[i];
+    }
+
+    // Sorting characters in descending order using Quick-Sort
+    quick_sort_chars(characters, 0, n - 1);
+
+    // Printing the sorted characters
+    for (int i = 0; i < n; i++) {
+        cout << characters[i] << " ";
+    }
+    cout << endl;
+
+    return 0;
+}
