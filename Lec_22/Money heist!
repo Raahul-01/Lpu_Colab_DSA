@@ -1,0 +1,37 @@
+#include <iostream>
+#include <vector>
+#include <algorithm>
+
+using namespace std;
+
+// Function to calculate the maximum loot using recursion
+int maximumLoot(vector<int>& houses, int n) {
+    if (n <= 0) {
+        return 0;
+    }
+    
+    // Calculate the maximum loot by either robbing the current house and skipping the next house,
+    // or skipping the current house and moving to the next one.
+    int loot1 = houses[n - 1] + maximumLoot(houses, n - 2); // Rob the current house
+    int loot2 = maximumLoot(houses, n - 1); // Skip the current house
+    
+    // Return the maximum loot between the two choices
+    return max(loot1, loot2);
+}
+
+int main() {
+    int n;
+    cin >> n; // Number of houses
+    
+    vector<int> houses(n);
+    
+    for (int i = 0; i < n; ++i) {
+        cin >> houses[i]; // Amount of money in each house
+    }
+
+    int maxLoot = maximumLoot(houses, n);
+    
+    cout << "Maximum loot without alerting the police: " << maxLoot << endl;
+
+    return 0;
+}
