@@ -1,0 +1,85 @@
+#include <iostream>
+using namespace std;
+
+class TreeNode {
+public:
+    int data;
+    TreeNode* left;
+    TreeNode* right;
+
+    TreeNode(int val) {
+        data = val;
+        left = nullptr;
+        right = nullptr;
+    }
+};
+
+TreeNode* insert(TreeNode* root, int val) {
+    if (root == nullptr) {
+        return new TreeNode(val);
+    }
+
+    if (val < root->data) {
+        root->left = insert(root->left, val);
+    } else if (val > root->data) {
+        root->right = insert(root->right, val);
+    }
+
+    return root;
+}
+
+void deleteTree(TreeNode* root) {
+    if (root == nullptr) {
+        return;
+    }
+
+    deleteTree(root->left);
+    deleteTree(root->right);
+    delete root;
+}
+
+bool areIdentical(TreeNode* root1, TreeNode* root2) {
+    if (root1 == nullptr && root2 == nullptr)
+        return true;
+
+    if (root1 == nullptr || root2 == nullptr)
+        return false;
+
+    return (root1->data == root2->data) &&
+           areIdentical(root1->left, root2->left) &&
+           areIdentical(root1->right, root2->right);
+}
+
+int main() {
+    TreeNode* root1 = nullptr;
+    TreeNode* root2 = nullptr;
+    int val;
+
+    // Input for the first binary search tree (City A)
+    while (true) {
+        cin >> val;
+        if (val == -1)
+            break;
+        root1 = insert(root1, val);
+    }
+
+    // Input for the second binary search tree (City B)
+    while (true) {
+        cin >> val;
+        if (val == -1)
+            break;
+        root2 = insert(root2, val);
+    }
+
+    if (areIdentical(root1, root2)) {
+        cout << "Both vehicle fleets are identical" << endl;
+    } else {
+        cout << "Vehicle fleets are not identical" << endl;
+    }
+
+    // Free memory (if needed)
+    deleteTree(root1);
+    deleteTree(root2);
+
+    return 0;
+}
