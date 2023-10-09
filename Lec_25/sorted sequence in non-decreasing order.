@@ -1,0 +1,37 @@
+#include <stdio.h>
+#include <stdbool.h>
+#include <limits.h>
+
+// Function to check if an array represents an inorder traversal of a BST
+bool isValidInorder(int arr[], int n) {
+    int prev = INT_MIN;  // Initialize previous element as negative infinity
+    
+    for (int i = 0; i < n; i++) {
+        // Check if the current element is smaller than the previous one
+        if (arr[i] < prev) {
+            return false;
+        }
+        prev = arr[i];  // Update the previous element
+    }
+
+    return true;
+}
+
+int main() {
+    int n;
+    scanf("%d", &n);
+
+    int arr[n];
+
+    for (int i = 0; i < n; i++) {
+        scanf("%d", &arr[i]);
+    }
+
+    if (isValidInorder(arr, n)) {
+        printf("Yes\n");
+    } else {
+        printf("No\n");
+    }
+
+    return 0;
+}
