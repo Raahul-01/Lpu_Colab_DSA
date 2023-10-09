@@ -1,0 +1,54 @@
+#include <stdio.h>
+#include <stdlib.h>
+
+struct Node {
+    int data;
+    struct Node* left;
+    struct Node* right;
+};
+
+//Function to create a new node
+struct Node* createNode(int data) {
+    struct Node* newNode = new Node;
+    newNode->data = data;
+    newNode->left = NULL;
+    newNode->right = NULL;
+    return newNode;
+}
+
+//Function to build a tree
+struct Node* insertNode(struct Node* root, int data) {
+    if (root == NULL) {
+        return createNode(data);
+    }
+    if (data < root->data) {
+        root->left = insertNode(root->left, data);
+    }
+    else if (data > root->data) {
+        root->right = insertNode(root->right, data);
+    }
+    return root;
+}
+
+//Function to perform the preorder traversal
+void preorderTraversal(struct Node* root) {
+    if (root == NULL) {
+        return;
+    }
+    printf("%d ", root->data);
+    preorderTraversal(root->left);
+    preorderTraversal(root->right);
+}
+
+int main() {
+    struct Node* root = NULL;
+    int n, data;
+    scanf("%d", &n);
+    for (int i = 0; i < n; i++) {
+        scanf("%d", &data);
+        root = insertNode(root, data);
+    }
+
+    preorderTraversal(root);
+    return 0;
+}
