@@ -1,0 +1,80 @@
+#include <stdio.h>
+#include <stdlib.h>
+#include <stdbool.h>
+#include <unordered_set>
+
+// Define the structure for a binary tree node
+struct Node {
+    int data;
+    struct Node *left, *right;
+};
+
+// Function to count the number of nodes in the binary tree
+int nodeCount(struct Node *root) {
+    if (root == NULL) {
+        return 0;
+    }
+    return 1 + nodeCount(root->left) + nodeCount(root->right);
+}
+
+// Function to create a new binary tree node
+struct Node *createNode(int data) {
+    struct Node *newNode = (struct Node *)malloc(sizeof(struct Node));
+    newNode->data = data;
+    newNode->left = newNode->right = NULL;
+    return newNode;
+}
+
+// Function to build a binary tree 
+struct Node *buildBinaryTree() {
+    int data;
+    scanf("%d", &data);
+
+    if (data == -1) {
+        return NULL;  // Return NULL for an empty node
+    }
+
+    struct Node *root = createNode(data);
+
+    root->left = buildBinaryTree();
+    root->right = buildBinaryTree();
+
+    return root;
+}
+
+// Function to check if a binary tree has duplicate values
+bool hasDuplicateValuesHelper(struct Node *node, std::unordered_set<int>& seen) {
+    if (node == NULL) {
+        return false;
+    }
+
+    // Check if the current node's data is already in the set
+    if (seen.find(node->data) != seen.end()) {
+        return true; // Duplicate found
+    }
+
+    // Add the current node's data to the set
+    seen.insert(node->data);
+
+    // Recursively check left and right subtrees
+    return hasDuplicateValuesHelper(node->left, seen) || hasDuplicateValuesHelper(node->right, seen);
+}
+
+bool hasDuplicateValues(struct Node *root) {
+    std::unordered_set<int> seen;
+    return hasDuplicateValuesHelper(root, seen);
+}
+
+int main() {
+    struct Node *root = NULL;
+
+    root = buildBinaryTree();
+
+    if (hasDuplicateValues(root)) {
+        printf("Yes\n");
+    } else {
+        printf("No\n");
+    }
+
+    return 0;
+}
