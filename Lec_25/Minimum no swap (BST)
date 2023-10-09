@@ -1,0 +1,111 @@
+//
+You are given an unordered binary tree, and your task is to determine the minimum number of swaps required to convert it into a binary search tree (BST). 
+
+#include <stdio.h>
+#include <stdlib.h>
+
+// Definition for a binary tree node
+struct TreeNode {
+    int val;
+    struct TreeNode* left;
+    struct TreeNode* right;
+};
+
+// Function to build the binary tree
+struct TreeNode* buildTree(int arr[], int* index, int n) {
+    if (*index >= n || arr[*index] == -1) {
+        (*index)++;
+        return NULL;
+    }
+
+    struct TreeNode* root = (struct TreeNode*)malloc(sizeof(struct TreeNode));
+    root->val = arr[(*index)];
+    (*index)++;
+    root->left = buildTree(arr, index, n);
+    root->right = buildTree(arr, index, n);
+
+    return root;
+}
+
+// Inorder traversal to get the elements in sorted order
+void inorder(struct TreeNode* root, int sorted[], int* index) {
+    if (!root) {
+        return;
+    }
+    inorder(root->left, sorted, index);
+    sorted[(*index)++] = root->val;
+    inorder(root->right, sorted, index);
+}
+
+// Function to count the minimum number of swaps required to convert to BST
+int minSwapsToBST(struct TreeNode* root) {
+    int sorted[100];
+    int index = 0;
+
+    // Perform an inorder traversal to get elements in sorted order
+    inorder(root, sorted, &index);
+
+    // Create an array of pairs to store element and its index
+    struct ElementIndex {
+        int element;
+        int index;
+    } arr[100];
+
+    for (int i = 0; i < index; i++) {
+        arr[i].element = sorted[i];
+        arr[i].index = i;
+    }
+
+    // Sort the array of pairs based on the elements
+    for (int i = 0; i < index; i++) {
+        for (int j = i + 1; j < index; j++) {
+            if (arr[i].element > arr[j].element) {
+                // Swap the elements
+                struct ElementIndex temp = arr[i];
+                arr[i] = arr[j];
+                arr[j] = temp;
+            }
+        }
+    }
+
+    int swaps = 0;
+    // Perform the cycle sort to find the minimum swaps
+    for (int i = 0; i < index; i++) {
+        if (arr[i].index == i) {
+            continue;
+        } else {
+            int current_element = arr[i].element;
+            while (arr[i].index != i) {
+                int next_element = arr[i].element;
+                int next_index = arr[i].index;
+                // Swap elements
+                arr[i].element = arr[next_index].element;
+                arr[i].index = arr[next_index].index;
+                arr[next_index].element = current_element;
+                arr[next_index].index = next_index;
+                current_element = next_element;
+                swaps++;
+            }
+        }
+    }
+
+    return swaps;
+}
+
+int main() {
+    int n;
+    scanf("%d", &n);
+
+    int arr[100];
+    for (int i = 0; i < n; i++) {
+        scanf("%d", &arr[i]);
+    }
+
+    int index = 0;
+    struct TreeNode* root = buildTree(arr, &index, n);
+
+    int swaps = minSwapsToBST(root);
+    printf("%d\n", swaps);
+
+    return 0;
+}
