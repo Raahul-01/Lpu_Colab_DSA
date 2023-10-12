@@ -1,0 +1,80 @@
+#include <iostream>
+using namespace std;
+
+struct Node {
+    int data;
+    Node* left;
+    Node* right;
+};
+
+int predecessor;
+
+//Function to create a new node
+Node* newNode(int data) {
+    Node* node = new Node;
+    node->data = data;
+    node->left = nullptr;
+    node->right = nullptr;
+    return node;
+}
+
+//Function to build the tree
+Node* insert(Node* root, int data) {
+    if (root == nullptr) {
+        return newNode(data);
+    }
+    if (data < root->data) {
+        root->left = insert(root->left, data);
+    } else if (data > root->data) {
+        root->right = insert(root->right, data);
+    }
+    return root;
+}
+
+//Function to find the predecessor
+void findPredecessor(Node* root, int val) {
+    if (root == nullptr) {
+        return;
+    }
+    if (root->data == val) {
+        if (root->left != nullptr) {
+            Node* node = root->left;
+            while (node->right != nullptr) {
+                node = node->right;
+            }
+            predecessor = node->data;
+        }
+    } else if (root->data > val) {
+        findPredecessor(root->left, val);
+    } else {
+        predecessor = root->data;
+        findPredecessor(root->right, val);
+    }
+}
+
+int main() {
+    Node* root = nullptr;
+
+    int n, data;
+    cin >> n;
+
+    for (int i = 0; i < n; ++i) {
+        cin >> data;
+        root = insert(root, data);
+    }
+
+    int targetData;
+    cin >> targetData;
+
+    predecessor = -1;
+    findPredecessor(root, targetData);
+
+    if (predecessor != -1) {
+        cout << "Inorder Predecessor : " << predecessor << endl;
+    } else {
+        cout << "Doesn't exist";
+    }
+
+    delete root;
+
+    return 0;
