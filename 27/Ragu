@@ -1,0 +1,71 @@
+#include <stdio.h>
+#include <stdlib.h>
+
+struct node {
+    int data;
+    struct node* left;
+    struct node* right;
+};
+
+struct node* root = NULL;
+
+// Function to create a new node
+struct node* createNode(int data) {
+    struct node* newNode = (struct node*)malloc(sizeof(struct node));
+    newNode->data = data;
+    newNode->left = newNode->right = NULL;
+    return newNode;
+}
+
+// Function to insert a node into the BST
+void insert(int data) {
+    struct node* newNode = createNode(data);
+
+    if (root == NULL) {
+        root = newNode;
+    } else {
+        struct node* current = root;
+        struct node* parent;
+        while (1) {
+            parent = current;
+            if (data < current->data) {
+                current = current->left;
+                if (current == NULL) {
+                    parent->left = newNode;
+                    return;
+                }
+            } else {
+                current = current->right;
+                if (current == NULL) {
+                    parent->right = newNode;
+                    return;
+                }
+            }
+        }
+    }
+}
+
+// Function for postorder traversal
+void postorder(struct node* root) {
+    if (root == NULL) {
+        return;
+    }
+    postorder(root->left);
+    postorder(root->right);
+    printf("%d ", root->data);
+}
+
+int main() {
+    int d;
+    do {
+        scanf("%d", &d);
+        if (d > 0) {
+            insert(d);
+        }
+    } while (d != -1);
+
+    printf("Post order Traversal:\n");
+    postorder(root);
+
+    return 0;
+}
