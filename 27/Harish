@@ -1,0 +1,35 @@
+#include <iostream>
+#include <vector>
+
+using namespace std;
+
+vector<int> postorder;
+
+void constructPostorder(vector<int>& arr, int index) {
+    if (index < arr.size()) {
+        constructPostorder(arr, 2 * index + 1); // Left child
+        constructPostorder(arr, 2 * index + 2); // Right child
+        postorder.push_back(arr[index]);
+    }
+}
+
+int main() {
+    int n;
+    cin >> n;
+    vector<int> arr(n);
+
+    for (int i = 0; i < n; i++) {
+        cin >> arr[i];
+    }
+
+    constructPostorder(arr, 0);
+
+    for (int i = 0; i < n; i++) {
+        if (i != 0) {
+            cout << " ";
+        }
+        cout << postorder[i];
+    }
+
+    return 0;
+}
