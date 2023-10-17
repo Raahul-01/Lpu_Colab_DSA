@@ -1,0 +1,57 @@
+#include <stdio.h>
+#include <stdlib.h>
+
+struct node {
+    int data;
+    struct node* left;
+    struct node* right;
+};
+
+struct node* root = NULL;
+
+// Function to create a new node
+struct node* createNode(int data) {
+    struct node* newNode = (struct node*)malloc(sizeof(struct node));
+    newNode->data = data;
+    newNode->left = NULL;
+    newNode->right = NULL;
+    return newNode;
+}
+
+// Function to insert a node into the BST
+struct node* insert(struct node* root, int data) {
+    if (root == NULL) {
+        return createNode(data);
+    }
+    if (data < root->data) {
+        root->left = insert(root->left, data);
+    } else if (data > root->data) {
+        root->right = insert(root->right, data);
+    }
+    return root;
+}
+
+// Function to calculate the sum of all nodes in the BST
+int sumOfNodes(struct node* root) {
+    if (root == NULL) {
+        return 0;
+    }
+    return root->data + sumOfNodes(root->left) + sumOfNodes(root->right);
+}
+
+int main() {
+    int d;
+    do {
+        scanf("%d", &d);
+        if (d > 0) {
+            root = insert(root, d);
+        }
+    } while (d != -1);
+
+    int sum = sumOfNodes(root);
+    printf("Sum of all nodes in the BST is %d", sum);
+
+    // Free memory to prevent memory leaks
+    // You should traverse the tree and free all allocated nodes in a real application.
+    return 0;
+}
