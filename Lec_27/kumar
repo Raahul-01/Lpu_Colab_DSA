@@ -1,0 +1,65 @@
+#include <stdio.h>
+#include <stdlib.h>
+
+struct node
+{
+  int data;
+  struct node* left;
+  struct node* right;
+};
+
+struct node* root = NULL;
+
+void append(int d)
+{
+    struct node* newNode = (struct node*)malloc(sizeof(struct node));
+    newNode->data = d;
+    newNode->left = NULL;
+    newNode->right = NULL;
+
+    if (root == NULL) {
+        root = newNode;
+    } else {
+        struct node* current = root;
+        while (1) {
+            if (d <= current->data) {
+                if (current->left == NULL) {
+                    current->left = newNode;
+                    break;
+                } else {
+                    current = current->left;
+                }
+            } else {
+                if (current->right == NULL) {
+                    current->right = newNode;
+                    break;
+                } else {
+                    current = current->right;
+                }
+            }
+        }
+    }
+}
+
+void display(struct node* current)
+{
+    if (current != NULL) {
+        display(current->left);
+        printf("%d ", current->data);
+        display(current->right);
+    }
+}
+
+int main()
+{
+    int d;
+    do {
+        scanf("%d", &d);
+        if (d > 0) {
+            append(d);
+        }
+    } while (d != -1);
+    
+    display(root);
+    return 0;
+}
